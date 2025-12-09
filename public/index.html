@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNO Multiplayer</title>
+    <link rel="icon" type="image/x-icon" href="assets/site/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/site/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="lobby/lobby.css">
+    <link rel="stylesheet" href="wallet/wallet.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <img src="assets/site/logo.png" alt="Logo" class="loading-logo">
+            <div class="loading-bar-container">
+                <div id="loadingBar" class="loading-bar"></div>
+            </div>
+            <div id="loadingText" class="loading-text">Loading assets...</div>
+        </div>
+    </div>
+    
+    <!-- Wallet Connection Button -->
+    <div class="wallet-button-container">
+        <button id="connectWalletBtn" class="wallet-button">Connect Wallet</button>
+    </div>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <img src="assets/site/logo.png" alt="4 Colors Multiplayer" class="logo-img">
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-item online-users">
+                <i class="fas fa-users sidebar-icon"></i>
+                <span class="sidebar-text">Online: <span id="onlineUsersCount">0</span></span>
+            </div>
+            <button class="sidebar-item sidebar-button" id="howItWorksBtn">
+                <i class="fas fa-question-circle sidebar-icon"></i>
+                <span class="sidebar-text">HOW DOES IT WORK?</span>
+            </button>
+            <button class="sidebar-item sidebar-button" id="gameRulesBtn">
+                <i class="fas fa-book sidebar-icon"></i>
+                <span class="sidebar-text">GAME RULES</span>
+            </button>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="sidebar-item sidebar-button sidebar-link">
+                <i class="fab fa-x-twitter sidebar-icon"></i>
+                <span class="sidebar-text">x.com</span>
+            </a>
+            <a href="https://pump.fun" target="_blank" rel="noopener noreferrer" class="sidebar-item sidebar-button sidebar-link">
+                <i class="fas fa-capsules sidebar-icon"></i>
+                <span class="sidebar-text">pump.fun</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-wrapper">
+            <!-- Lobby UI (shown initially) -->
+            <div id="lobbyContainer" class="lobby-container">
+            <div class="lobby-content">
+            <p id="lobbyStatusText" class="lobby-status-text">Connecting to server...</p>
+            
+            <!-- Lobby List Table -->
+            <div class="lobby-table-container">
+                <table id="lobbyTable" class="lobby-table">
+                    <thead>
+                        <tr>
+                            <th>Lobby</th>
+                            <th>Stake</th>
+                            <th>Mode</th>
+                            <th>Players</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lobbyTableBody">
+                        <!-- Lobbies will be dynamically inserted here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Current Lobby View (shown when player joins) -->
+            <div id="currentLobbyView" class="current-lobby-view" style="display: none;">
+                <div class="current-lobby-header">
+                    <h2 id="currentLobbyName">Lobby #1</h2>
+                    <button id="leaveLobbyBtn" class="btn btn-secondary">Leave Lobby</button>
+                </div>
+                <div class="current-lobby-info">
+                    <div class="lobby-info-item">
+                        <span class="info-label">Stake:</span>
+                        <span id="currentLobbyStake" class="info-value">0.5 SOL</span>
+                    </div>
+                    <div class="lobby-info-item">
+                        <span class="info-label">Players:</span>
+                        <span id="currentLobbyCount" class="info-value">0/2</span>
+                    </div>
+                </div>
+                <div class="lobby-players" id="lobbyPlayers">
+                    <!-- Player slots will be dynamically inserted -->
+                </div>
+                <p id="currentLobbyStatus" class="lobby-status-text">Waiting for players...</p>
+            </div>
+            
+            <div class="lobby-message" id="lobbyMessage"></div>
+        </div>
+    </div>
+    
+        <!-- Recent Wins Section -->
+        <div class="recent-wins-container">
+            <div class="recent-wins-content">
+                <h2 class="recent-wins-title">Recent Wins</h2>
+                
+                <!-- Recent Wins Table -->
+                <div class="recent-wins-table-container">
+                    <table id="recentWinsTable" class="recent-wins-table">
+                        <thead>
+                            <tr>
+                                <th>Winner</th>
+                                <th>Time</th>
+                                <th>Mode</th>
+                                <th>Stake</th>
+                                <th>Win Amount</th>
+                                <th>Transaction</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentWinsTableBody">
+                            <tr><td colspan="6" style="text-align: center; color: #888; padding: 20px;">Loading recent wins...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    
+            <!-- Game Canvas (hidden initially) -->
+            <div id="gameContainer" class="canvas-container" style="display: none;">
+                <canvas id="gameCanvas"></canvas>
+            </div>
+        </div>
+        
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <span class="chat-title" id="chatTitle">ALL CHAT</span>
+                <i class="fas fa-comments chat-icon"></i>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-welcome">Welcome to chat! Start a conversation.</div>
+            </div>
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="chatInput" 
+                    class="chat-input" 
+                    placeholder="Type a message..." 
+                    maxlength="300"
+                >
+                <button id="chatSendBtn" class="chat-send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <div id="howItWorksModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="closeHowItWorks">&times;</span>
+            <h2>HOW DOES IT WORK?</h2>
+            <div class="modal-body">
+                <p>Sol Uno is a card game where players compete for SOL stakes.</p>
+                <h3>Getting Started:</h3>
+                <ol>
+                    <li>Connect your wallet</li>
+                    <li>Select lobby from table and join</li>
+                    <li>Wait for the lobby to fill up</li>
+                    <li>Game starts automatically when full</li>
+                </ol>
+                <h3>Gameplay:</h3>
+                <ul>
+                    <li>Match cards by color or number</li>
+                    <li>Use special cards strategically</li>
+                    <li>First player to empty their hand wins</li>
+                    <li>Winner takes the entire SOL stake</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div id="gameRulesModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="closeGameRules">&times;</span>
+            <h2>GAME RULES</h2>
+            <div class="modal-body">
+                <h3>Basic Rules:</h3>
+                <ul>
+                    <li>Match the top card by color, number, or symbol</li>
+                    <li>If you can't play, draw a card</li>
+                    <li>Call "UNO" when you have one card left</li>
+                    <li>First to play all cards wins</li>
+                </ul>
+                <h3>Special Cards:</h3>
+                <ul>
+                    <li><strong>Skip:</strong> Next player loses their turn</li>
+                    <li><strong>Reverse:</strong> Changes direction of play</li>
+                    <li><strong>Draw 2:</strong> Next player draws 2 cards</li>
+                    <li><strong>Wild:</strong> Choose any color</li>
+                    <li><strong>Wild Draw 4:</strong> Choose color + next player draws 4</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Username Modal -->
+    <div id="usernameModal" class="modal" style="display: none;">
+        <div class="username-modal-content">
+            <button class="username-modal-close" id="closeUsernameModal">&times;</button>
+            
+            <!-- Profile Picture Section -->
+            <div class="username-form-group">
+                <label class="username-form-label">Profile Picture</label>
+                <div class="pfp-upload-container">
+                    <div class="pfp-preview-container">
+                        <img id="pfpPreview" src="/pfp/default.jpg" alt="Profile Picture" class="pfp-preview">
+                        <div class="pfp-overlay">
+                            <label for="pfpInput" class="pfp-upload-label">
+                                <i class="fas fa-camera"></i>
+                                <span>Change</span>
+                            </label>
+                        </div>
+                    </div>
+                    <input 
+                        type="file" 
+                        id="pfpInput" 
+                        accept="image/*" 
+                        style="display: none;"
+                    >
+                    <div id="pfpError" class="username-error"></div>
+                    <div id="pfpUploadStatus" class="pfp-upload-status"></div>
+                </div>
+            </div>
+            
+            <div class="username-form-group">
+                <label class="username-form-label" for="usernameInput">Username</label>
+                <input 
+                    type="text" 
+                    id="usernameInput" 
+                    class="username-form-input" 
+                    placeholder="Enter your username"
+                    maxlength="20"
+                    minlength="3"
+                >
+                <div id="usernameError" class="username-error"></div>
+            </div>
+            <div class="username-form-group">
+                <label class="username-form-label">Wallet Address</label>
+                <div id="walletDisplay" class="wallet-display"></div>
+            </div>
+            <div class="username-modal-actions">
+                <button id="disconnectWalletBtn" class="username-modal-btn username-modal-btn-danger">Disconnect</button>
+                <button id="saveUsernameBtn" class="username-modal-btn username-modal-btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="index.js"></script>
+</body>
+</html>

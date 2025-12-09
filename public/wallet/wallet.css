@@ -1,0 +1,307 @@
+/* Wallet Connection Button */
+.wallet-button-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1500;
+}
+
+#connectWalletBtn {
+    padding: 10px 20px;
+    background: #8300ce;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(131, 0, 206, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#connectWalletBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(131, 0, 206, 0.4);
+}
+
+#connectWalletBtn:active {
+    transform: translateY(0);
+}
+
+#connectWalletBtn.wallet-connected {
+    background: #8300ce;
+    box-shadow: 0 4px 15px rgba(131, 0, 206, 0.3);
+}
+
+#connectWalletBtn.wallet-connected:hover {
+    box-shadow: 0 6px 20px rgba(131, 0, 206, 0.4);
+}
+
+.wallet-btn-pfp {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.wallet-btn-text {
+    white-space: nowrap;
+}
+
+/* Username Modal */
+#usernameModal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.username-modal-content {
+    background: rgba(18, 18, 23, 0.98);
+    margin: 10% auto;
+    padding: 30px;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.username-modal-close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.username-modal-close:hover {
+    color: #fff;
+}
+
+.username-modal-content h2 {
+    color: #fff;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.username-modal-content p {
+    color: #d0d0d0;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+}
+
+.username-form-group {
+    margin-bottom: 20px;
+}
+
+.username-form-label {
+    display: block;
+    color: #fff;
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.username-form-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(36, 36, 48, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9em;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.username-form-input:focus {
+    border-color: rgba(102, 126, 234, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.username-form-input::placeholder {
+    color: #666;
+}
+
+.wallet-display {
+    padding: 10px 16px;
+    background: rgba(36, 36, 48, 0.5);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 8px;
+    color: #8b9cff;
+    font-size: 0.85em;
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+    margin-top: 5px;
+}
+
+.username-error {
+    color: #ff6b6b;
+    font-size: 0.85em;
+    margin-top: 8px;
+    display: none;
+}
+
+.username-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.username-modal-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.username-modal-btn-primary {
+    background: #667eea;
+    color: white;
+}
+
+.username-modal-btn-primary:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-1px);
+}
+
+.username-modal-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.username-modal-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #d0d0d0;
+}
+
+.username-modal-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.username-modal-btn-danger {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.username-modal-btn-danger:hover {
+    background: rgba(255, 107, 107, 0.3);
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+/* Profile Picture Upload Styles */
+.pfp-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.pfp-preview-container {
+    position: relative;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(102, 126, 234, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pfp-preview-container:hover {
+    border-color: rgba(102, 126, 234, 0.8);
+    transform: scale(1.05);
+}
+
+.pfp-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.pfp-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pfp-preview-container:hover .pfp-overlay {
+    opacity: 1;
+}
+
+.pfp-upload-label {
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.pfp-upload-label i {
+    font-size: 1.2em;
+}
+
+.pfp-upload-status {
+    font-size: 0.85em;
+    color: #4caf50;
+    display: none;
+}
+
+.pfp-upload-status.uploading {
+    color: #667eea;
+    display: block;
+}
+
+.pfp-upload-status.success {
+    color: #4caf50;
+    display: block;
+}
+
+.pfp-upload-status.error {
+    color: #ff6b6b;
+    display: block;
+}
+
+
