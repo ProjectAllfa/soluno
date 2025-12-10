@@ -67,7 +67,7 @@ function renderRecentWins(wins) {
     recentWinsTableBody.innerHTML = wins.map((win, index) => {
         const txLink = win.txHash 
             ? `<div class="tx-link-container">
-                <a href="https://solscan.io/tx/${win.txHash}" target="_blank" rel="noopener noreferrer" class="tx-link">solscan.io/tx/${win.txHash.substring(0, 8)}...</a>
+                <a href="https://solscan.io/tx/${win.txHash}" target="_blank" rel="noopener noreferrer" class="tx-link">solscan.io/tx/${win.txHash.substring(0, 6)}...</a>
                 <button class="tx-copy-btn" data-tx-hash="${win.txHash}" data-index="${index}" title="Copy transaction hash">
                     <i class="fas fa-copy"></i>
                 </button>
