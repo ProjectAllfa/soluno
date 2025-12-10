@@ -531,6 +531,21 @@ body {
     
     .chat-input-container {
         padding: 12px;
+        gap: 6px;
+    }
+    
+    .chat-input {
+        padding: 9px 12px;
+        font-size: 0.8em;
+    }
+    
+    .chat-send-btn {
+        padding: 9px 12px;
+        min-width: 40px;
+    }
+    
+    .chat-send-btn i {
+        font-size: 0.9em;
     }
     
     .chat-messages {
@@ -549,6 +564,25 @@ body {
     
     .main-content {
         padding-right: 16px;
+    }
+    
+    .chat-input-container {
+        padding: 10px;
+        gap: 6px;
+    }
+    
+    .chat-input {
+        padding: 8px 10px;
+        font-size: 0.78em;
+    }
+    
+    .chat-send-btn {
+        padding: 8px 10px;
+        min-width: 38px;
+    }
+    
+    .chat-send-btn i {
+        font-size: 0.85em;
     }
 }
 
@@ -581,6 +615,10 @@ body {
     .chat-send-btn {
         padding: 8px 10px;
         min-width: 36px;
+    }
+    
+    .chat-send-btn i {
+        font-size: 0.8em;
     }
     
     .chat-message-avatar-container {
@@ -625,6 +663,21 @@ body {
     
     .chat-input-container {
         padding: 10px;
+        gap: 5px;
+    }
+    
+    .chat-input {
+        padding: 7px 9px;
+        font-size: 0.72em;
+    }
+    
+    .chat-send-btn {
+        padding: 7px 9px;
+        min-width: 34px;
+    }
+    
+    .chat-send-btn i {
+        font-size: 0.75em;
     }
 }
 
