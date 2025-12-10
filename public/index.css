@@ -514,6 +514,14 @@ body {
 /* Responsive Design */
 /* Large laptop screens (1400px - 1440px) */
 @media (max-width: 1440px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+    }
+    
     .chat-panel {
         width: 280px;
         max-width: 280px;
@@ -555,15 +563,20 @@ body {
 
 /* Medium laptop screens (1280px - 1400px) */
 @media (max-width: 1400px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+        padding-right: 16px;
+    }
+    
     .chat-panel {
         width: 240px;
         max-width: 240px;
         height: 85vh;
         max-height: 85vh;
-    }
-    
-    .main-content {
-        padding-right: 16px;
     }
     
     .chat-input-container {
@@ -588,15 +601,20 @@ body {
 
 /* Small laptop screens (1024px - 1280px) */
 @media (max-width: 1280px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+        padding-right: 12px;
+    }
+    
     .chat-panel {
         width: 200px;
         max-width: 200px;
         height: 85vh;
         max-height: 85vh;
-    }
-    
-    .main-content {
-        padding-right: 12px;
     }
     
     .chat-header {
@@ -638,15 +656,20 @@ body {
 }
 
 @media (max-width: 1024px) {
+    .sidebar {
+        width: 200px;
+    }
+    
+    .main-content {
+        margin-left: 200px;
+        padding-right: 8px;
+    }
+    
     .chat-panel {
         width: 180px;
         max-width: 180px;
         height: 85vh;
         max-height: 85vh;
-    }
-    
-    .main-content {
-        padding-right: 8px;
     }
     
     .chat-message-text {
