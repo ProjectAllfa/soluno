@@ -216,7 +216,7 @@ export async function preloadPlayerPfps(players, idField = 'id') {
     try {
         await loadPfpsForUsers(users, 'id');
     } catch (error) {
-        console.warn('Error preloading player profile pictures:', error);
+        // Error preloading player profile pictures
     }
 }
 

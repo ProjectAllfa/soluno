@@ -166,7 +166,7 @@ export function loadAnimationImages() {
         reverseAnimationImage = new Image();
         reverseAnimationImage.onload = () => {
             loadedCount++;
-            console.log('Reverse animation image loaded');
+            // Reverse animation image loaded
             if (loadedCount === 4 && !hasError) {
                 animationImagesLoaded = true;
                 resolve();
@@ -183,7 +183,7 @@ export function loadAnimationImages() {
         skipAnimationImage = new Image();
         skipAnimationImage.onload = () => {
             loadedCount++;
-            console.log('Skip animation image loaded');
+            // Skip animation image loaded
             if (loadedCount === 4 && !hasError) {
                 animationImagesLoaded = true;
                 resolve();
@@ -201,7 +201,7 @@ export function loadAnimationImages() {
         fingerSpritesheet.onload = () => {
             fingerSpritesheetLoaded = true; // Set independently
             loadedCount++;
-            console.log('✅ Finger spritesheet loaded successfully!');
+            // Finger spritesheet loaded successfully
             if (loadedCount === 4 && !hasError) {
                 animationImagesLoaded = true;
                 resolve();
@@ -220,7 +220,7 @@ export function loadAnimationImages() {
         callUnoImage.onload = () => {
             callUnoImageLoaded = true; // Set independently
             loadedCount++;
-            console.log('Call UNO image loaded');
+            // Call UNO image loaded
             if (loadedCount === 4 && !hasError) {
                 animationImagesLoaded = true;
                 resolve();
@@ -275,7 +275,7 @@ export function setGameState(state, playerIndex = 0) {
                         startTime: now
                     });
                     lastUnoCallTimes[index] = now;
-                    console.log(`UNO call animation triggered for player ${index}`);
+                    // UNO call animation triggered
                 }
             }
         });
@@ -409,7 +409,7 @@ function getUnoCallImagePosition(playerIndex, width, height, cardWidth, cardHeig
             };
         } else {
             // Fallback - should not reach here
-            console.warn(`Unexpected player index ${playerIndex} in 3-player mode`);
+            // Unexpected player index in 3-player mode
             return {
                 x: centerX - imageSize / 2,
                 y: centerY - imageSize / 2,
@@ -525,14 +525,14 @@ function renderFingerAnimation(ctx, deckX, deckY, cardWidth, cardHeight) {
     // Only log every 2 seconds to avoid spam
     const now = Date.now();
     if (!window.lastFingerDebugLog || (now - window.lastFingerDebugLog) > 2000) {
-        console.log('Finger animation check:', debugInfo);
+        // Finger animation check
         window.lastFingerDebugLog = now;
     }
     
     // Check if spritesheet is loaded
     if (!fingerSpritesheetLoaded || !fingerSpritesheet) {
         if (shouldDrawConditionMetAt) {
-            console.log('Finger animation blocked: spritesheet not loaded');
+            // Finger animation blocked: spritesheet not loaded
         }
         return;
     }
@@ -558,7 +558,7 @@ function renderFingerAnimation(ctx, deckX, deckY, cardWidth, cardHeight) {
     // Need topCard and currentColor to check for playable cards
     if (!gameState.topCard || !gameState.currentColor) {
         if (shouldDrawConditionMetAt) {
-            console.log('Finger animation blocked: no topCard or currentColor');
+            // Finger animation blocked: no topCard or currentColor
         }
         shouldDrawConditionMetAt = null;
         return;
@@ -582,7 +582,7 @@ function renderFingerAnimation(ctx, deckX, deckY, cardWidth, cardHeight) {
     // Track when this condition first became true
     if (!shouldDrawConditionMetAt) {
         shouldDrawConditionMetAt = Date.now();
-        console.log('✅ Finger animation timer started - will show in 3 seconds');
+        // Finger animation timer started
     }
     
     // Check if 3 seconds have passed since condition became true
@@ -593,7 +593,7 @@ function renderFingerAnimation(ctx, deckX, deckY, cardWidth, cardHeight) {
     
     // Log first time animation shows
     if (elapsed < FINGER_ANIMATION_DELAY + 200) { // Within 200ms of trigger
-        console.log('👉 Finger animation now showing!');
+        // Finger animation now showing
     }
     
     // Calculate animation frame based on time (looping)

@@ -27,7 +27,6 @@ async function getRpcUrl() {
         cachedRpcUrl = data.rpcUrl;
         return cachedRpcUrl;
     } catch (error) {
-        console.error('Error fetching RPC URL:', error);
         throw new Error('Failed to get RPC URL. Please refresh the page.');
     }
 }
@@ -75,7 +74,6 @@ export async function requestPaymentInfo(wallet, lobbyId) {
 
         return await response.json();
     } catch (error) {
-        console.error('Error requesting payment info:', error);
         throw error;
     }
 }
@@ -94,10 +92,8 @@ export async function getWalletBalance(walletAddress) {
     } catch (error) {
         // If RPC is rate limited, return null to indicate we couldn't check
         if (error.message && error.message.includes('403')) {
-            console.warn('RPC rate limited, cannot check balance');
             return null;
         }
-        console.error('Error getting wallet balance:', error);
         return 0;
     }
 }
@@ -111,8 +107,6 @@ export async function getWalletBalance(walletAddress) {
  */
 export async function createAndSignPayment(userWallet, escrowWallet, solAmount) {
     try {
-        console.log('Starting payment transaction...', { userWallet, escrowWallet, solAmount });
-        
         // Check if wallet is available
         if (!window.solana) {
             throw new Error('Solana wallet not found. Please install Phantom or another Solana wallet.');
@@ -130,16 +124,13 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
         
         // Use the connected wallet's public key (more reliable)
         const actualUserWallet = connectedPublicKey.toString();
-        console.log('Connected wallet:', actualUserWallet);
         
         if (actualUserWallet !== userWallet) {
-            console.warn(`Wallet mismatch: connected=${actualUserWallet}, provided=${userWallet}. Using connected wallet.`);
+            // Wallet mismatch - use connected wallet
         }
 
         const userPublicKey = connectedPublicKey; // Use the actual connected wallet
         const escrowPublicKey = new PublicKey(escrowWallet);
-        
-        console.log('Creating transaction...');
 
         // Get connection
         const connection = await getConnection();
@@ -151,7 +142,6 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
         } catch (error) {
             // If balance check fails (e.g., 403 rate limit), skip balance check
             // The transaction will fail later if there's insufficient balance anyway
-            console.warn('Could not check balance (may be rate limited), proceeding with transaction:', error.message);
             userBalance = Number.MAX_SAFE_INTEGER; // Skip balance check
         }
         
@@ -173,35 +163,17 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
         );
 
         // Get blockhash from Helius RPC
-        console.log('Getting latest blockhash...');
         let blockhash, lastValidBlockHeight;
         try {
             const result = await connection.getLatestBlockhash('finalized');
             blockhash = result.blockhash;
             lastValidBlockHeight = result.lastValidBlockHeight;
             transaction.recentBlockhash = blockhash;
-            console.log('Blockhash received:', blockhash);
         } catch (error) {
-            console.error('Failed to get blockhash:', error);
             throw new Error('Unable to connect to Solana network. Please check your internet connection or try again later.');
         }
         
         transaction.feePayer = userPublicKey;
-        
-        console.log('Transaction prepared:', {
-            recentBlockhash: transaction.recentBlockhash,
-            feePayer: transaction.feePayer.toString(),
-            instructions: transaction.instructions.length
-        });
-        
-        console.log('Requesting wallet signature...');
-        console.log('Available wallet methods:', {
-            signTransaction: typeof window.solana.signTransaction,
-            signAndSendTransaction: typeof window.solana.signAndSendTransaction,
-            sendTransaction: typeof window.solana.sendTransaction,
-            isPhantom: window.solana.isPhantom,
-            isSolflare: window.solana.isSolflare
-        });
 
         // Phantom and most wallets use signTransaction (not signAndSendTransaction)
         // signAndSendTransaction is less common
@@ -209,14 +181,10 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
         
         if (window.solana.signTransaction) {
             // Standard method - sign then send separately
-            console.log('Using signTransaction...');
             let signedTransaction;
             try {
-                console.log('Calling window.solana.signTransaction - wallet popup should appear now...');
                 signedTransaction = await window.solana.signTransaction(transaction);
-                console.log('Transaction signed successfully!');
             } catch (error) {
-                console.error('signTransaction error:', error);
                 if (error.code === 4001 || error.message?.includes('User rejected') || error.message?.includes('User cancelled') || error.message?.includes('cancel')) {
                     throw new Error('Transaction cancelled by user');
                 }
@@ -224,26 +192,20 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
             }
 
             // Send transaction
-            console.log('Sending signed transaction...');
             try {
                 signature = await connection.sendRawTransaction(signedTransaction.serialize(), {
                     skipPreflight: true,
                     maxRetries: 3
                 });
-                console.log('Transaction sent successfully:', signature);
             } catch (error) {
-                console.error('Error sending transaction:', error);
                 throw new Error(`Failed to send transaction: ${error.message}`);
             }
         } else if (window.solana.signAndSendTransaction) {
             // Alternative method if available
-            console.log('Using signAndSendTransaction...');
             try {
                 const result = await window.solana.signAndSendTransaction(transaction);
                 signature = result.signature;
-                console.log('Transaction signed and sent:', signature);
             } catch (error) {
-                console.error('signAndSendTransaction error:', error);
                 if (error.code === 4001 || error.message?.includes('User rejected') || error.message?.includes('User cancelled')) {
                     throw new Error('Transaction cancelled by user');
                 }
@@ -255,7 +217,6 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
 
         // Check transaction status (using polling instead of WebSocket subscription)
         // The transaction is already sent, we just want to verify it was successful
-        console.log('Checking transaction status...');
         try {
             // Poll for transaction status (avoid WebSocket issues in browser)
             let confirmed = false;
@@ -270,25 +231,17 @@ export async function createAndSignPayment(userWallet, escrowWallet, solAmount) 
                     }
                     if (txStatus.value.confirmationStatus === 'confirmed' || txStatus.value.confirmationStatus === 'finalized') {
                         confirmed = true;
-                        console.log('Transaction confirmed on-chain');
                         break;
                     }
                 }
             }
-            
-            if (!confirmed) {
-                console.warn('Transaction may still be processing, but it was sent successfully:', signature);
-            }
         } catch (error) {
             // If status check fails, transaction might still be processing
             // This is okay - the transaction was sent and the wallet confirmed it
-            console.warn('Could not verify transaction status, but it was sent successfully:', signature);
         }
 
         return signature;
     } catch (error) {
-        console.error('Error creating payment transaction:', error);
-        
         // Provide user-friendly error messages
         if (error.message.includes('Insufficient balance')) {
             throw error;
@@ -326,7 +279,6 @@ export async function verifyPayment(signature, wallet, lobbyId) {
 
         return await response.json();
     } catch (error) {
-        console.error('Error verifying payment:', error);
         throw error;
     }
 }
@@ -339,30 +291,22 @@ export async function verifyPayment(signature, wallet, lobbyId) {
  */
 export async function processPayment(wallet, lobbyId) {
     try {
-        console.log('processPayment called with:', { wallet, lobbyId });
-        
         // Step 1: Request payment info
-        console.log('Step 1: Requesting payment info...');
         const paymentInfo = await requestPaymentInfo(wallet, lobbyId);
-        console.log('Payment info received:', paymentInfo);
         
         if (!paymentInfo.escrowWallet || !paymentInfo.solAmount) {
             throw new Error('Invalid payment info received');
         }
 
         // Step 2: Create and sign transaction
-        console.log('Step 2: Creating and signing transaction...');
         const signature = await createAndSignPayment(
             wallet,
             paymentInfo.escrowWallet,
             paymentInfo.solAmount
         );
-        console.log('Transaction signature:', signature);
 
         // Step 3: Verify payment with server
-        console.log('Step 3: Verifying payment with server...');
         const verification = await verifyPayment(signature, wallet, lobbyId);
-        console.log('Verification result:', verification);
 
         if (!verification.success) {
             throw new Error('Payment verification failed');
@@ -370,12 +314,6 @@ export async function processPayment(wallet, lobbyId) {
 
         return signature;
     } catch (error) {
-        console.error('Error processing payment:', error);
-        console.error('Error details:', {
-            message: error.message,
-            stack: error.stack,
-            name: error.name
-        });
         throw error;
     }
 }

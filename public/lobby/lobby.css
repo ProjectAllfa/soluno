@@ -21,6 +21,23 @@
     margin-top: 60px;
 }
 
+.lobby-status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.lobby-fees-text {
+    color: #666;
+    font-size: 0.85em;
+    font-weight: 400;
+    position: absolute;
+    right: 0;
+    padding-left: 16px;
+}
+
 .lobby-title {
     font-size: 1.5em;
     color: #fff;
@@ -33,7 +50,7 @@
 .lobby-status-text {
     font-size: 0.85em;
     color: #888;
-    margin-bottom: 16px;
+    margin: 0;
     text-align: center;
     font-weight: 400;
     transition: all 0.3s ease;

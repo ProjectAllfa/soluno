@@ -34,7 +34,7 @@ export function initInput(playerIndex = 0) {
     const { canvas } = getCanvasContext();
     
     if (!canvas) {
-        console.error('Canvas not found for input handling');
+        // Canvas not found for input handling
         return;
     }
     
@@ -185,26 +185,22 @@ function handleCanvasClick(event) {
     
     // Debug: Log all clicks when game is finished
     if (currentGameState && currentGameState.status === 'finished') {
-        console.log('Canvas clicked when game finished:', { 
-            x, y, scaledX, scaledY, 
-            gameStatus: currentGameState.status,
-            winner: currentGameState.winner 
-        });
+        // Canvas clicked when game finished
     }
     
     // Check return to lobby button click (only when game is finished)
     // This should be checked first, before other turn-based checks
     if (currentGameState && currentGameState.status === 'finished') {
         const buttonClicked = checkReturnToLobbyButtonClick(scaledX, scaledY);
-        console.log('Button click check result:', buttonClicked);
+        // Button click check
         
         if (buttonClicked) {
-            console.log('Return to lobby button clicked!');
+            // Return to lobby button clicked
             // Return to lobby
             if (window.returnToLobby) {
                 window.returnToLobby();
             } else {
-                console.error('window.returnToLobby is not defined!');
+                // window.returnToLobby is not defined
             }
             return;
         }
@@ -271,7 +267,7 @@ function handleCanvasClick(event) {
         if (player && player.hand && player.hand.length > 0) {
             const hasPlayable = hasPlayableCard(player.hand, gameState.topCard, gameState.currentColor);
             if (hasPlayable && !gameState.hasDrawnPlayableCard) {
-                console.log('You have a playable card. You must play a card before drawing.');
+                // You have a playable card. You must play a card before drawing.
                 return;
             }
         }
@@ -393,11 +389,7 @@ function checkReturnToLobbyButtonClick(x, y) {
     // Only check if game is finished
     // Note: winner can be 0 (player index 0), so check for null/undefined instead of truthy
     if (!gameState || gameState.status !== 'finished' || gameState.winner == null) {
-        console.log('Button check failed - game not finished:', {
-            hasGameState: !!gameState,
-            status: gameState?.status,
-            winner: gameState?.winner
-        });
+        // Button check failed - game not finished
         return false;
     }
     
@@ -416,14 +408,7 @@ function checkReturnToLobbyButtonClick(x, y) {
     const buttonX = boxX + (boxWidth - buttonWidth) / 2; // Centered horizontally in box
     const buttonY = boxY + boxHeight * 0.6; // Position in lower portion of box
     
-    console.log('Button position check:', {
-        x, y,
-        buttonX, buttonY,
-        buttonWidth, buttonHeight,
-        boxWidth, boxHeight,
-        scaleFactor,
-        inBounds: x >= buttonX && x <= buttonX + buttonWidth && y >= buttonY && y <= buttonY + buttonHeight
-    });
+    // Button position check
     
     const clicked = x >= buttonX && x <= buttonX + buttonWidth &&
                     y >= buttonY && y <= buttonY + buttonHeight;
@@ -503,9 +488,9 @@ function handleCardClick(cardIndex) {
     if (!canPlay) {
         // Provide specific error messages
         if (card.color === 'wild' && card.value === 'draw4') {
-            console.log('Cannot play Wild Draw 4: You have a card matching the current color');
+            // Cannot play Wild Draw 4: You have a card matching the current color
         } else {
-            console.log('Cannot play this card');
+            // Cannot play this card
         }
         return;
     }

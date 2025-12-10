@@ -70,7 +70,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         onPaymentRefunded: lobbyCallbacks.onPaymentRefunded,
         onRefundError: lobbyCallbacks.onRefundError,
         onGameStart: async (data) => {
-            console.log('Game starting...', data);
             lobbyCallbacks.onGameStart();
             
             // Wait for assets if not loaded
@@ -111,7 +110,6 @@ window.addEventListener('DOMContentLoaded', async () => {
             }
         },
         onGameError: (error) => {
-            console.error('Game error:', error);
             // Could show error in UI
         },
         onTurnStart: (data) => {
@@ -351,7 +349,7 @@ async function loadGameAssets() {
             loadWinMessageBox()
         ]);
         assetsLoaded = true;
-        console.log('All game assets loaded');
+        // All game assets loaded
     } catch (error) {
         console.error('Failed to load game assets:', error);
     }

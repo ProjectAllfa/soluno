@@ -144,7 +144,7 @@ export function playCardFromHand(cardIndex, chosenColor = null) {
         // Actions will be unblocked when turn_start event arrives with new timer
         if (isActionCardGivingAnotherTurn) {
             actionsBlocked = true;
-            console.log('Actions blocked - waiting for new turn after action card');
+            // Actions blocked - waiting for new turn after action card
         }
     }
     // If willNeedUno is true and not an action card, timer will continue running (turn doesn't end yet)
@@ -200,10 +200,10 @@ export function playCardFromHand(cardIndex, chosenColor = null) {
                     // Use the color we just set, or fallback to currentGameState.currentColor
                     const colorToUse = newColor || currentGameState.currentColor;
                     if (colorToUse && colorImgs[colorToUse]) {
-                        console.log('Triggering color animation for:', colorToUse);
+                        // Triggering color animation
                         animateColorChange(colorImgs[colorToUse]);
                     } else {
-                        console.log('Color animation not triggered:', { colorToUse, colorImgsLoaded: colorImgs.loaded, hasColor: colorToUse ? colorImgs[colorToUse] : false });
+                        // Color animation not triggered
                     }
                 }
                 
@@ -358,7 +358,7 @@ export function startGameFromServer(serverState, playerIndex, isReconnection = f
         
         if (isReconnection) {
             // For reconnection, skip animations and set state directly
-            console.log('Reconnecting to game, skipping animations');
+            // Reconnecting to game, skipping animations
             isReconnecting = true;
             
             // Convert server state to client format directly
@@ -404,7 +404,7 @@ export function startGameFromServer(serverState, playerIndex, isReconnection = f
                 isReconnecting = false;
             }, 1000);
             
-            console.log('Game reconnected, player index:', playerIndex);
+            // Game reconnected
             return currentGameState;
         }
         
@@ -444,7 +444,7 @@ export function startGameFromServer(serverState, playerIndex, isReconnection = f
         // Start deal animation - it will add cards one by one
         startDealAnimationFromServer(serverState, playerIndex);
         
-        console.log('Game started from server, player index:', playerIndex);
+        // Game started from server
         return currentGameState;
     } catch (error) {
         console.error('Failed to start game from server:', error);
@@ -456,7 +456,7 @@ export function startGameFromServer(serverState, playerIndex, isReconnection = f
  * Start deal animation from server state
  */
 function startDealAnimationFromServer(serverState, playerIndex) {
-    console.log('Starting deal animation from server state', { playerCount: serverState.players.length, playerIndex });
+    // Starting deal animation from server state
     
     const playerCount = serverState.players.length;
     const cardsPerPlayer = 7;
@@ -465,7 +465,7 @@ function startDealAnimationFromServer(serverState, playerIndex) {
     const localPlayer = serverState.players[playerIndex];
     const localHand = localPlayer.hand || [];
     
-    console.log('Local player hand:', localHand.length, 'cards');
+    // Local player hand loaded
     
     // Create players array with empty hands (we'll add cards during animation)
     const playersForAnimation = serverState.players.map((p, idx) => ({
@@ -497,7 +497,7 @@ function startDealAnimationFromServer(serverState, playerIndex) {
         }
     }
     
-    console.log('Deck for animation:', deckForAnimation.length, 'cards');
+    // Deck for animation prepared
     
     // Start deal animation
     startDealAnimation(
@@ -571,7 +571,7 @@ function startDealAnimationFromServer(serverState, playerIndex) {
                                 
                                 setGameState(currentGameState, localPlayerIndex);
                                 updateInputState();
-                                console.log('First discard pile card animated and set.');
+                                // First discard pile card animated and set
                             }
                         });
                     }
@@ -584,7 +584,7 @@ function startDealAnimationFromServer(serverState, playerIndex) {
             // Update state (without discard pile card if animation is pending)
             setGameState(currentGameState, localPlayerIndex);
             updateInputState();
-            console.log('Deal animation complete');
+            // Deal animation complete
         }
     );
 }
@@ -657,19 +657,19 @@ export function updateGameStateFromServer(serverState) {
     // If turn_start already set the timer for the NEW player, preserve it
     let turnJustChanged = false;
     if (oldStateForComparison && oldStateForComparison.currentPlayerIndex !== clientState.currentPlayerIndex) {
-        console.log(`Turn changed from player ${oldStateForComparison.currentPlayerIndex} to ${clientState.currentPlayerIndex}`);
+        // Turn changed
         
         // Clear timer if it belongs to the old player or hasn't been set for the new player yet
         // Only preserve if turnTimerPlayerIndex matches the NEW currentPlayerIndex
         if (turnTimerPlayerIndex !== clientState.currentPlayerIndex) {
-            console.log('Clearing old timer (belongs to previous player or not set yet)');
+            // Clearing old timer
             turnExpiresAt = null;
             turnTimerPlayerIndex = null;
             if (currentGameState) {
                 currentGameState.turnTimeRemaining = null;
             }
         } else {
-            console.log('Preserving timer set by turn_start event for new player');
+            // Preserving timer set by turn_start event
         }
         
         turnJustChanged = true;
@@ -813,7 +813,7 @@ export function updateGameStateFromServer(serverState) {
                 // If hand size decreased by exactly 1 and there's a topCard, opponent played a card
                 // Start the play animation immediately so pendingOpponentPlayAnimation is set for draw delay checks
                 if (newHandSize === oldHandSize - 1 && clientState.topCard) {
-                    console.log(`Detected opponent ${playerIndex} played a card (${oldHandSize} -> ${newHandSize})`);
+                    // Detected opponent played a card
                     opponentPlayedCard = true;
                     opponentPlayedCardData = {
                         playerIndex: playerIndex,
@@ -885,7 +885,7 @@ export function updateGameStateFromServer(serverState) {
                 // If hand size increased, opponent drew card(s) - could be 1 or multiple (Draw 2/4)
                 if (newHandSize > oldHandSize) {
                     const cardsDrawn = newHandSize - oldHandSize;
-                    console.log(`Detected opponent ${playerIndex} drew ${cardsDrawn} card(s) (${oldHandSize} -> ${newHandSize})`);
+                    // Detected opponent drew cards
                     
                     // Check if there's a pending play animation (local or opponent) for a draw 2/4 card
                     // If so, delay draw animations until play animation completes
@@ -967,7 +967,7 @@ export function updateGameStateFromServer(serverState) {
             // Only trigger if we don't have a pending opponent animation (it will trigger in onComplete)
             // OR if the opponent animation already completed
             if (!pendingOpponentPlayAnimation) {
-                console.log('Triggering color animation from server state update:', newColor);
+                // Triggering color animation from server state update
                 // Small delay to ensure card play animation has started or completed
                 setTimeout(() => {
                     animateColorChange(colorImgs[newColor]);
@@ -1050,13 +1050,13 @@ function updateTurnTimer() {
  * Handle turn_start event from server
  */
 export function handleTurnStart(data) {
-    console.log('Turn start event received:', data);
+    // Turn start event received
     
     // Unblock actions when new turn starts
     // This is important for 2-player mode where action cards give the same player another turn
     if (actionsBlocked) {
         actionsBlocked = false;
-        console.log('Actions unblocked - new turn started');
+        // Actions unblocked - new turn started
     }
     
     // Calculate clock offset if server sent its current time
@@ -1083,7 +1083,7 @@ export function handleTurnStart(data) {
     // Start the countdown timer
     updateTurnTimer();
     
-    console.log('Turn timer started, expires at:', new Date(turnExpiresAt));
+    // Turn timer started
 }
 
 /**
@@ -1117,7 +1117,7 @@ export function handleTurnTimeout(data) {
  * @param {Object} data - Disconnect data from server
  */
 export function handlePlayerDisconnected(data) {
-    console.log('Player disconnected:', data);
+    // Player disconnected
     
     // Update game state to reflect disconnected player
     if (currentGameState && currentGameState.players[data.disconnectedPlayerIndex]) {
@@ -1341,10 +1341,10 @@ function animateOpponentCardPlay(playerIndex, oldHandSize, playedCard, newColor 
                     // Use the color we just set
                     const colorToUse = newColor;
                     if (colorToUse && colorImgs[colorToUse]) {
-                        console.log('Triggering color animation for opponent play:', colorToUse, 'oldColor:', oldColor);
+                        // Triggering color animation for opponent play
                         animateColorChange(colorImgs[colorToUse]);
                     } else {
-                        console.log('Color animation not triggered - missing color:', { colorToUse, hasColorImg: colorToUse ? colorImgs[colorToUse] : false });
+                        // Color animation not triggered - missing color
                     }
                 }
                 

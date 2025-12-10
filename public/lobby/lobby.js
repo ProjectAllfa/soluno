@@ -95,7 +95,6 @@ function checkForReconnection() {
     if (isWalletConnected()) {
         const user = getCurrentUser();
         if (user && user.username) {
-            console.log('Checking reconnection with wallet:', user.wallet, 'username:', user.username);
             socket.emit('check_reconnection', { 
                 playerName: user.username,
                 wallet: user.wallet 
@@ -107,7 +106,6 @@ function checkForReconnection() {
     // Fallback to old localStorage method for backward compatibility
     const storedPlayerName = localStorage.getItem('unoPlayerName');
     if (storedPlayerName) {
-        console.log('Checking reconnection with stored player name:', storedPlayerName);
         socket.emit('check_reconnection', { playerName: storedPlayerName });
     }
 }
@@ -118,7 +116,6 @@ function checkForReconnection() {
 export function getLobbyCallbacks() {
     return {
         onConnect: () => {
-            console.log('Socket connected, checking for reconnection...');
             // Check for reconnection (will retry if wallet not ready)
             checkForReconnection();
             
@@ -325,8 +322,6 @@ async function joinLobbyById(lobbyId) {
     joinButtons.forEach(btn => btn.disabled = true);
     
     try {
-        console.log('Join lobby clicked, checking wallet...');
-        
         // Get the actual connected wallet address (more reliable than stored value)
         if (!window.solana) {
             throw new Error('Solana wallet not found. Please install Phantom or another Solana wallet.');
@@ -341,13 +336,8 @@ async function joinLobbyById(lobbyId) {
         }
         
         const connectedWallet = window.solana.publicKey.toString();
-        console.log('Connected wallet:', connectedWallet);
-        console.log('Processing payment for lobby:', lobbyId);
-        
         // Process payment using the connected wallet
         const paymentSignature = await processPayment(connectedWallet, lobbyId);
-        
-        console.log('Payment successful, signature:', paymentSignature);
         
         // Payment successful, now join lobby
         showMessage('Payment successful! Joining lobby...', 'success');
@@ -362,8 +352,6 @@ async function joinLobbyById(lobbyId) {
             });
         }
     } catch (error) {
-        console.error('Payment error:', error);
-        console.error('Error stack:', error.stack);
         showMessage(error.message || 'Payment failed. Please try again.', 'error');
         
         // Re-enable join buttons
