@@ -319,10 +319,10 @@ body {
 }
 
 /* Responsive Design */
-/* Laptop screens (1024px - 1440px) */
+/* Large laptop screens (1400px - 1440px) */
 @media (max-width: 1440px) {
     .chat-panel {
-        width: 260px;
+        width: 280px;
         height: 85vh;
         max-height: 85vh;
     }
@@ -344,48 +344,90 @@ body {
     }
 }
 
-@media (max-width: 1280px) {
+/* Medium laptop screens (1280px - 1400px) */
+@media (max-width: 1400px) {
     .chat-panel {
         width: 240px;
         height: 85vh;
         max-height: 85vh;
     }
     
+    .main-content {
+        padding-right: 16px;
+    }
+}
+
+/* Small laptop screens (1024px - 1280px) */
+@media (max-width: 1280px) {
+    .chat-panel {
+        width: 200px;
+        height: 85vh;
+        max-height: 85vh;
+    }
+    
+    .main-content {
+        padding-right: 12px;
+    }
+    
     .chat-header {
-        padding: 10px 14px;
+        padding: 10px 12px;
     }
     
     .chat-title {
-        font-size: 0.8em;
+        font-size: 0.75em;
     }
     
     .chat-input {
-        padding: 8px 12px;
-        font-size: 0.8em;
+        padding: 8px 10px;
+        font-size: 0.75em;
     }
     
     .chat-send-btn {
-        padding: 8px 12px;
+        padding: 8px 10px;
+        min-width: 36px;
+    }
+    
+    .chat-message-avatar-container {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .chat-message-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .chat-messages {
+        padding: 10px;
+        gap: 8px;
     }
 }
 
 @media (max-width: 1024px) {
     .chat-panel {
-        width: 220px;
+        width: 180px;
         height: 85vh;
         max-height: 85vh;
     }
     
+    .main-content {
+        padding-right: 8px;
+    }
+    
     .chat-message-text {
-        font-size: 0.8em;
+        font-size: 0.75em;
     }
     
     .chat-message-username {
-        font-size: 0.75em;
+        font-size: 0.7em;
     }
     
     .chat-message-time {
         font-size: 0.65em;
+    }
+    
+    .chat-input-container {
+        padding: 10px;
     }
 }
 
@@ -471,6 +513,8 @@ body {
 /* Chat Panel */
 .chat-panel {
     width: 360px;
+    min-width: 180px;
+    max-width: 360px;
     height: 85vh;
     max-height: 85vh;
     position: sticky;
