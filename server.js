@@ -239,7 +239,7 @@ app.get('/api/recent-wins', async (req, res) => {
         }
         
         // Fetch fresh data
-        const recentWins = await getRecentWins(20);
+        const recentWins = await getRecentWins(10);
         
         // Format data for frontend and fetch pfpUrl for winners
         const formattedWins = await Promise.all(recentWins.map(async (win) => {
